@@ -1,6 +1,5 @@
 import {
   Canvas,
-  ImageSVG,
   LinearGradient,
   Rect,
   useSVG,
@@ -10,7 +9,8 @@ import React, { ReactNode } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { groundHeight, roadHeight } from "@/utils/constant";
+import Road from "@/module/game/components/Road";
+import { groundHeight } from "@/utils/constant";
 
 const colors = {
   light: ["#2BC9EC", "#C8F5FF", "#FFFFFF"],
@@ -38,13 +38,7 @@ const ScreenCanva = ({ children }: { children?: ReactNode }) => {
         />
       </Rect>
       {children}
-      <ImageSVG
-        svg={road}
-        width={width}
-        height={roadHeight}
-        x={0}
-        y={height - groundHeight - roadHeight}
-      />
+      <Road width={width} height={height} />
       <Rect width={width} height={groundHeight} y={height - groundHeight}>
         <LinearGradient
           colors={groundColor}

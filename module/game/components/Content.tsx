@@ -1,6 +1,4 @@
 import {
-  birdHeight,
-  birdWidth,
   cityHeight,
   cloudsHeight,
   grassHeight,
@@ -12,7 +10,6 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 
 const Content = () => {
   const grass = useSVG(require("@/assets/images/grass.svg")),
-    bird = useSVG(require("@/assets/icons/bird.svg")),
     city = useSVG(require("@/assets/images/Buildings.svg")),
     clouds = useSVG(require("@/assets/images/Clouds.svg"));
 
@@ -20,7 +17,6 @@ const Content = () => {
 
   const positions = useMemo(
     () => ({
-      bird: { x: (width - birdWidth) / 2, y: Math.round(height / 3) },
       grass: { x: 0, y: height - groundHeight - grassHeight },
       city: { x: 0, y: height - groundHeight - grassHeight - cityHeight },
       cloud: {
@@ -33,13 +29,6 @@ const Content = () => {
 
   return (
     <>
-      <ImageSVG
-        svg={bird}
-        width={birdWidth}
-        height={birdHeight}
-        y={positions.bird.y}
-        x={positions.bird.x}
-      />
       <Group>
         <ImageSVG
           svg={clouds}

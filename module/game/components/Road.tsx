@@ -1,0 +1,58 @@
+import { Group, Path, Rect } from "@shopify/react-native-skia";
+
+import { useAnimateBackgroundContent } from "@/hooks/use-animate-background";
+import { groundHeight, roadHeight } from "@/utils/constant";
+
+import { RoadProps } from "../types.game";
+
+const Road = ({ width, height }: RoadProps) => {
+  const { roadX } = useAnimateBackgroundContent(width);
+
+  return (
+    <Group transform={[{ translateY: height - roadHeight - groundHeight }]}>
+      <Rect x={0} y={0} width={width} height={roadHeight} color="#9be658" />
+
+      {/* Clip visible area */}
+      <Group clip={{ x: 0, y: 0, width, height: roadHeight }}>
+        <Group transform={[{ translateX: roadX.value }]}>
+          <Path
+            color="#83cb44"
+            path={`
+              M30 0h50L50 33.113H0z
+              M125 0h50l-30 33.113H95z
+              M220 0h50l-30 33.113h-50z
+              M315 0h50l-30 33.113h-50z
+              M410 0h50l-30 33.113h-50z
+              M505 0h50l-30 33.113h-50z
+              M600 0h50l-30 33.113h-50z
+              M695 0h13v33.113h-43z
+            `}
+          />
+
+          {/* Duplicate for seamless looping */}
+          <Group transform={[{ translateX: 708 }]}>
+            <Path
+              color="#83cb44"
+              path={`
+                M30 0h50L50 33.113H0z
+                M125 0h50l-30 33.113H95z
+                M220 0h50l-30 33.113h-50z
+                M315 0h50l-30 33.113h-50z
+                M410 0h50l-30 33.113h-50z
+                M505 0h50l-30 33.113h-50z
+                M600 0h50l-30 33.113h-50z
+                M695 0h13v33.113h-43z
+              `}
+            />
+          </Group>
+        </Group>
+      </Group>
+
+      {/* Highlights */}
+      <Rect x={0} y={0} width={width} height={3} color="#e6ff87" />
+      <Rect x={0} y={30} width={width} height={3} color="#618b35" />
+    </Group>
+  );
+};
+
+export default Road;
