@@ -12,7 +12,7 @@ const App = () => {
   const { width, height } = useWindowDimensions();
 
   const { poleX } = useAnimateBackgroundContent(width);
-  const { gesture, yPosition } = useBirdMotion();
+  const { gesture, yPosition, transform, origin } = useBirdMotion();
 
   const topPipeHeight = 350,
     bottomPipeHeight = 170;
@@ -26,7 +26,13 @@ const App = () => {
           bottomHeight={bottomPipeHeight}
           xValue={poleX}
         />
-        <Bird width={width} height={height} yPosition={yPosition} />
+        <Bird
+          width={width}
+          height={height}
+          yPosition={yPosition}
+          transform={transform}
+          origin={origin}
+        />
       </ScreenCanva>
     </GestureDetector>
   );

@@ -4,7 +4,7 @@ import { birdHeight, birdWidth } from "@/utils/constant";
 
 import { BirdProps } from "../types.game";
 
-const Bird = ({ width, height, yPosition }: BirdProps) => {
+const Bird = ({ width, height, yPosition, transform, origin }: BirdProps) => {
   const bird = useSVG(require("@/assets/icons/bird.svg"));
 
   const birdXPosition = (width - birdWidth) / 2;
@@ -16,6 +16,8 @@ const Bird = ({ width, height, yPosition }: BirdProps) => {
       height={birdHeight}
       y={yPosition}
       x={birdXPosition}
+      transform={transform}
+      origin={origin}
     />
   );
 };
