@@ -1,11 +1,12 @@
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -13,7 +14,12 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  // const [fonts]= useFonts()
+  const [fontLoaded] = useFonts({
+    gemunu700: require("@/assets/fonts/GemunuLibre-Bold.ttf"),
+    fffforward: require("@/assets/fonts/FFFForward.ttf"),
+  });
+
+  if (!fontLoaded) return;
 
   return (
     <SafeAreaProvider>
@@ -25,6 +31,7 @@ export default function RootLayout() {
           options={{ presentation: "modal", title: "Modal" }}
         /> */}
         </Stack>
+
         <StatusBar style="auto" />
       </GestureHandlerRootView>
     </SafeAreaProvider>

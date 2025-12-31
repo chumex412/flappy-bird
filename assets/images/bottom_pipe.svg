@@ -6,13 +6,13 @@
 <path d="M50 27H16V398H50V27Z" fill="#B3DC58"/>
 <path d="M39 27H27V398H39V27Z" fill="#C3F060"/>
 <g style="mix-blend-mode:multiply" opacity="0.2">
-<rect width="56" height="9" transform="matrix(-1 0 0 1 61 27)" fill="url(#paint0_linear_2303_56)"/>
+<rect width="56" height="9" transform="matrix(-1 0 0 1 61 27)" fill="url(#paint0_linear_2341_56)"/>
 </g>
 <g style="mix-blend-mode:soft-light" opacity="0.4">
 <rect width="66" height="3" transform="matrix(-1 0 0 1 66 0)" fill="white"/>
 </g>
 <defs>
-<linearGradient id="paint0_linear_2303_56" x1="29" y1="2.8125" x2="29" y2="9" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_2341_56" x1="29" y1="2.8125" x2="29" y2="9" gradientUnits="userSpaceOnUse">
 <stop/>
 <stop offset="1" stop-opacity="0"/>
 </linearGradient>

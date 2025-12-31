@@ -7,6 +7,7 @@ import {
 } from "@shopify/react-native-skia";
 import React, { ReactNode } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
+import { SharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Road from "@/module/game/components/Road";
@@ -18,7 +19,13 @@ const colors = {
 
 const groundColor = ["#CB783B", "#ECBF7D"];
 
-const ScreenCanva = ({ children }: { children?: ReactNode }) => {
+const ScreenCanva = ({
+  children,
+  roadX,
+}: {
+  children?: ReactNode;
+  roadX: SharedValue<number>;
+}) => {
   const { width, height } = useWindowDimensions();
 
   const road = useSVG(require("@/assets/images/road.svg"));
@@ -38,7 +45,7 @@ const ScreenCanva = ({ children }: { children?: ReactNode }) => {
         />
       </Rect>
       {children}
-      <Road width={width} height={height} />
+      <Road width={width} height={height} roadX={roadX} />
       <Rect width={width} height={groundHeight} y={height - groundHeight}>
         <LinearGradient
           colors={groundColor}

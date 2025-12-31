@@ -1,20 +1,28 @@
 import { DerivedValue, SharedValue } from "react-native-reanimated";
 
 export interface PipeProps {
-  topHeight: number;
-  bottomHeight: number;
+  topHeight: SharedValue<number>;
+  bottomHeight: SharedValue<number>;
   xValue: SharedValue<number>;
+  bottomPipeY: SharedValue<number>;
 }
 
 export interface RoadProps {
   width: number;
   height: number;
+  roadX: SharedValue<number>;
 }
 
 export interface BirdProps {
   width: number;
   height: number;
   yPosition: SharedValue<number>;
-  transform: DerivedValue<{ rotate: number }[]>;
+  transform: DerivedValue<{ rotateZ: number }[]>;
   origin: DerivedValue<{ x: number; y: number }>;
+}
+
+export interface GameContentProps {
+  cityX: DerivedValue<number>;
+  cloudX: DerivedValue<number>;
+  grassX: DerivedValue<number>;
 }

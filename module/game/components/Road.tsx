@@ -1,12 +1,12 @@
 import { Group, Path, Rect } from "@shopify/react-native-skia";
+import { useDerivedValue } from "react-native-reanimated";
 
-import { useAnimateBackgroundContent } from "@/hooks/use-animate-background";
 import { groundHeight, roadHeight } from "@/utils/constant";
 
 import { RoadProps } from "../types.game";
 
-const Road = ({ width, height }: RoadProps) => {
-  const { roadX } = useAnimateBackgroundContent(width);
+const Road = ({ width, height, roadX }: RoadProps) => {
+  const roadTransform = useDerivedValue(() => [{ translateX: roadX.value }]);
 
   return (
     <Group transform={[{ translateY: height - roadHeight - groundHeight }]}>
@@ -14,7 +14,7 @@ const Road = ({ width, height }: RoadProps) => {
 
       {/* Clip visible area */}
       <Group clip={{ x: 0, y: 0, width, height: roadHeight }}>
-        <Group transform={[{ translateX: roadX.value }]}>
+        <Group transform={roadTransform}>
           <Path
             color="#83cb44"
             path={`
