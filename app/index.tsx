@@ -9,6 +9,7 @@ import { useBirdMotion } from "@/hooks/use-bird-motion";
 import Bird from "@/module/game/components/Bird";
 import Content from "@/module/game/components/Content";
 import Pipes from "@/module/game/components/Pipe";
+import Score from "@/module/game/components/Score";
 
 const App = () => {
   const { width, height } = useWindowDimensions();
@@ -28,14 +29,23 @@ const App = () => {
     moveBackground,
     movePole,
   } = useAnimateBackgroundContent(width, height);
-  const { gesture, yPosition, transform, origin, velocity, gameOver } =
-    useBirdMotion({
-      poleX,
-      backgroundX,
-      topPipeHeight: topPoleHeight,
-      bottomPipeY,
-      callback: show,
-    });
+  const {
+    gesture,
+    yPosition,
+    transform,
+    origin,
+    velocity,
+    gameOver,
+    hasScored,
+    score,
+    handleScores,
+  } = useBirdMotion({
+    poleX,
+    backgroundX,
+    topPipeHeight: topPoleHeight,
+    bottomPipeY,
+    callback: show,
+  });
 
   const resetGame = () => {
     yPosition.value = height / 3;
@@ -47,6 +57,7 @@ const App = () => {
     bottomPoleHeight.value = 350;
     moveBackground();
     movePole();
+    handleScores(false);
   };
 
   const closeDialog = () => {
@@ -72,6 +83,7 @@ const App = () => {
             transform={transform}
             origin={origin}
           />
+          <Score value={score} hasScored={hasScored} />
         </ScreenCanva>
       </GestureDetector>
       {isVisible ? (

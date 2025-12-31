@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import {
@@ -19,6 +19,7 @@ import {
   GRAVITY,
   pipeWidth,
 } from "@/utils/constant";
+
 import { BirdMotionHookType } from "./hook.type";
 
 export function useBirdMotion({
@@ -29,16 +30,19 @@ export function useBirdMotion({
   callback,
 }: BirdMotionHookType) {
   const { width, height } = useWindowDimensions();
+  const [score, setScore] = useState(0);
 
   const birdY = useSharedValue(Math.round(height / 3));
+  const birdVelocity = useSharedValue(100);
+  const gameOver = useSharedValue(false);
+  const hasScored = useSharedValue(false);
+
   const birdBounds = useDerivedValue(() => ({
     left: (width - birdWidth) / 2,
     right: (width - birdWidth) / 2 + birdWidth,
     top: birdY.value,
     bottom: birdY.value + birdHeight,
   }));
-  const birdVelocity = useSharedValue(100);
-  const gameOver = useSharedValue(false);
   const birdTransform = useDerivedValue(() => [
     {
       rotateZ: interpolate(
@@ -66,6 +70,10 @@ export function useBirdMotion({
     birdVelocity.value = birdVelocity.value + (GRAVITY * dt) / 1000;
   });
 
+  const handleScores = useCallback((isGameOn: boolean) => {
+    setScore((previousScore) => (isGameOn ? previousScore + 1 : 0));
+  }, []);
+
   // Collision detection
   useAnimatedReaction(
     () => ({
@@ -74,6 +82,10 @@ export function useBirdMotion({
       topPipeHeight: topPipeHeight.value,
     }),
     (currentValue, previousValue) => {
+      if (currentValue.pipeX <= 0) {
+        hasScored.value = false;
+      }
+
       if (currentValue && currentValue.birdY >= height - FINALPOSITION) {
         gameOver.value = true;
       }
@@ -92,6 +104,11 @@ export function useBirdMotion({
 
       if (isTopPipeCollision || isBottomPipeCollision) {
         gameOver.value = true;
+      } else if (
+        (isHorizontalCollision && !isTopPipeCollision) ||
+        (isHorizontalCollision && isBottomPipeCollision)
+      ) {
+        hasScored.value = true;
       }
     }
   );
@@ -102,11 +119,22 @@ export function useBirdMotion({
       if (currentValue && !previousValue) {
         cancelAnimation(backgroundX);
         cancelAnimation(poleX);
-
+        hasScored.value = false;
         callback && scheduleOnRN(callback);
       }
     }
   );
+
+  useAnimatedReaction(
+    () => hasScored.value,
+    (currentState, previousState) => {
+      if (currentState && !previousState) {
+        scheduleOnRN(handleScores, true);
+      }
+    }
+  );
+
+  console.log(score);
 
   return useMemo(
     () => ({
@@ -116,7 +144,19 @@ export function useBirdMotion({
       origin: birdOrigin,
       velocity: birdVelocity,
       gameOver,
+      hasScored,
+      score,
+      handleScores,
     }),
-    [birdY, gesture, birdTransform, birdOrigin, birdVelocity, gameOver]
+    [
+      birdY,
+      gesture,
+      birdTransform,
+      birdOrigin,
+      birdVelocity,
+      gameOver,
+      hasScored,
+      score,
+    ]
   );
 }

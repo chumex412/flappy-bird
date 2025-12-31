@@ -26,3 +26,8 @@ export interface GameContentProps {
   cloudX: DerivedValue<number>;
   grassX: DerivedValue<number>;
 }
+
+export interface ScoreText {
+  value: number;
+  hasScored: SharedValue<boolean>;
+}
