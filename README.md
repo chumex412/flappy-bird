@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# Flappy Bird Mobile Game
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a solution to the Flappy bird. I took on this challenge to improve my mobile application animation skills by building the project with TypeScript, React Native, Expo and Skia, and implementing clean architecture.
 
-## Get started
+## Table of contents
 
-1. Install dependencies
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+- [Author](#author)
 
-   ```bash
-   npm install
-   ```
+## Overview
 
-2. Start the app
+### The challenge
 
-   ```bash
-   npx expo start
-   ```
+Users should be able to:
 
-In the output, you'll find options to open the app in a
+- Tap anywhere on the screen to start the game once it's loaded
+- Tap anywhere on the screen to keep the bird floating
+- See their current scores and best scores on the game over screen after hitting an obstacle
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Screenshot
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+![Bare Layout setup](https://res.cloudinary.com/da8vqkdmt/image/upload/v1767437729/WhatsApp_Image_2026-01-03_at_11.53.20_vi84vp.jpg)
+![Full Layout Setup](https://res.cloudinary.com/da8vqkdmt/image/upload/v1767437729/WhatsApp_Image_2026-01-03_at_11.53.20_1_b9fmjz.jpg)
 
-## Get a fresh project
+### Links
 
-When you're ready, run:
+- Solution URL: [https://github.com/chumex412/flappy-bird](https://github.com/chumex412/flappy-bird)
+- ![A video showing the game in play](https://res.cloudinary.com/da8vqkdmt/video/upload/v1767437760/WhatsApp_Video_2026-01-03_at_11.53.23_1_hog7ps.mp4)
+- ![A video showing the full game flow](https://res.cloudinary.com/da8vqkdmt/video/upload/v1767437762/WhatsApp_Video_2026-01-03_at_11.53.23_kgbum1.mp4)
 
-```bash
-npm run reset-project
-```
+## My process
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+When I discovered the Flappy Bird design in the Figma Community, I had no idea how to approach the implementation because I only had basic knowledge of React Native animations. I searched for guidance on YouTube and came across a Flappy Bird tutorial by notJust.dev. The tutorial gave me a solid understanding of how to use React Native Reanimated, after which I figured out the rest on my own.
 
-## Learn more
+At one point, the animation became buggy. The same approach that worked in the tutorial resulted in jerky animations in my project, largely because several updates had been made since the live stream was recorded and my current implementation. I was able to resolve these issues by carefully referencing the documentation.
 
-To learn more about developing your project with Expo, look at the following resources:
+I also managed to animate the entire background, not just the poles. Essentially, everything on the screen is viewed through a camera lens. When the camera focuses on the bird, it appears as though the bird is moving, when in reality it’s the background that’s in motion. This concept became the foundation of the Flappy Bird animation.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Built with
 
-## Join the community
+- [React Native](https://reactnative.dev/docs/environment-setup) - JS library built on React for Native App development
+- [Expo Cli](https://docs.expo.dev/get-started/introduction/) - a framework that makes developing Android and iOS apps easier
+- [TypeScript](https://www.typescriptlang.org/) - For type checking and safety
+- [React Native Skia](https://shopify.github.io/react-native-skia/docs/getting-started/installation) - It brings advanced graphics to React Native.
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
 
-Join our community of developers creating universal apps.
+### What I learned
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+I learnt how to utilize React Native Reanimated to build an animated layout.
+
+I also learnt build a game layout with React Native Skia.
+
+### Continued development
+
+I would like to liven the game by increasing the speed, fixing the background jerky movements and improving my native app animation skills.
+
+### Useful resources
+
+- [React Native Skia Documentation](https://shopify.github.io/react-native-skia/docs/getting-started/installation) - This helped me understand how to use it's component to build the game layout.
+- [NotJust.Dev](https://www.youtube.com/watch?v=9F4aICEisVI&list=PPSV) - This gave a comprehensive explanation of building the flappy bird.
+
+## Author
+
+- TCM - [@chumex412](https://github.com/chumex412/)
+- Twitter - [@kode_navigator](https://www.twitter.com/kode_navigator)
