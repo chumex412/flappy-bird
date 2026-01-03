@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useWindowDimensions } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import {
@@ -27,15 +27,16 @@ export function useBirdMotion({
   backgroundX,
   topPipeHeight,
   bottomPipeY,
-  callback,
+  score,
+  scoreHandler,
+  stopGame,
 }: BirdMotionHookType) {
   const { width, height } = useWindowDimensions();
-  const [score, setScore] = useState(0);
 
   const birdY = useSharedValue(Math.round(height / 3));
-  const birdVelocity = useSharedValue(100);
-  const gameOver = useSharedValue(false);
+  const birdVelocity = useSharedValue(50);
   const hasScored = useSharedValue(false);
+  const gameOver = useSharedValue(false);
 
   const birdBounds = useDerivedValue(() => ({
     left: (width - birdWidth) / 2,
@@ -59,7 +60,7 @@ export function useBirdMotion({
     y: Number.isFinite(birdY.value) ? birdY.value : height / 3,
   }));
 
-  const gesture = Gesture.Tap().onStart(() => {
+  const gesture = Gesture.Tap().onEnd(() => {
     birdVelocity.value = -150;
   });
 
@@ -70,10 +71,6 @@ export function useBirdMotion({
     birdVelocity.value = birdVelocity.value + (GRAVITY * dt) / 1000;
   });
 
-  const handleScores = useCallback((isGameOn: boolean) => {
-    setScore((previousScore) => (isGameOn ? previousScore + 1 : 0));
-  }, []);
-
   // Collision detection
   useAnimatedReaction(
     () => ({
@@ -82,31 +79,45 @@ export function useBirdMotion({
       topPipeHeight: topPipeHeight.value,
     }),
     (currentValue, previousValue) => {
-      if (currentValue.pipeX <= 0) {
-        hasScored.value = false;
-      }
-
       if (currentValue && currentValue.birdY >= height - FINALPOSITION) {
         gameOver.value = true;
       }
 
       // Top Pipe Collision
-
       const isHorizontalCollision =
-        birdBounds.value.right >= poleX.value &&
-        birdBounds.value.left <= poleX.value + pipeWidth;
+        birdBounds.value.right >= currentValue.pipeX &&
+        birdBounds.value.left <= currentValue.pipeX + pipeWidth;
 
       const isTopPipeCollision =
-        birdBounds.value.top <= topPipeHeight.value && isHorizontalCollision;
+        birdBounds.value.top <= currentValue.topPipeHeight &&
+        isHorizontalCollision;
 
       const isBottomPipeCollision =
         birdBounds.value.bottom >= bottomPipeY.value && isHorizontalCollision;
 
       if (isTopPipeCollision || isBottomPipeCollision) {
         gameOver.value = true;
-      } else if (
-        (isHorizontalCollision && !isTopPipeCollision) ||
-        (isHorizontalCollision && isBottomPipeCollision)
+      }
+    }
+  );
+
+  useAnimatedReaction(
+    () => poleX.value,
+    (currentX, previousX) => {
+      if (currentX <= 0) {
+        hasScored.value = false;
+      }
+
+      // scoring: detect crossing the bird center
+      const left = birdBounds.value.left;
+
+      if (
+        previousX !== null &&
+        previousX !== undefined &&
+        previousX > left &&
+        currentX <= left &&
+        birdBounds.value.top > topPipeHeight.value &&
+        birdBounds.value.bottom < bottomPipeY.value
       ) {
         hasScored.value = true;
       }
@@ -120,7 +131,7 @@ export function useBirdMotion({
         cancelAnimation(backgroundX);
         cancelAnimation(poleX);
         hasScored.value = false;
-        callback && scheduleOnRN(callback);
+        scheduleOnRN(stopGame);
       }
     }
   );
@@ -129,12 +140,10 @@ export function useBirdMotion({
     () => hasScored.value,
     (currentState, previousState) => {
       if (currentState && !previousState) {
-        scheduleOnRN(handleScores, true);
+        scheduleOnRN(scoreHandler, true);
       }
     }
   );
-
-  console.log(score);
 
   return useMemo(
     () => ({
@@ -145,8 +154,6 @@ export function useBirdMotion({
       velocity: birdVelocity,
       gameOver,
       hasScored,
-      score,
-      handleScores,
     }),
     [
       birdY,
@@ -156,7 +163,6 @@ export function useBirdMotion({
       birdVelocity,
       gameOver,
       hasScored,
-      score,
     ]
   );
 }

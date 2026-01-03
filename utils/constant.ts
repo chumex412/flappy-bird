@@ -23,3 +23,9 @@ export const FONT_FAMILY = {
     bold: "gemunu700",
   },
 };
+
+export const colors = {
+  light: ["#2BC9EC", "#C8F5FF", "#FFFFFF"],
+};
+
+export const groundColor = ["#CB783B", "#ECBF7D"];

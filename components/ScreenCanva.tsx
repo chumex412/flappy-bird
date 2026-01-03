@@ -1,39 +1,31 @@
-import {
-  Canvas,
-  LinearGradient,
-  Rect,
-  useSVG,
-  vec,
-} from "@shopify/react-native-skia";
+import { Canvas, LinearGradient, Rect, vec } from "@shopify/react-native-skia";
 import React, { ReactNode } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { SharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Road from "@/module/game/components/Road";
-import { groundHeight } from "@/utils/constant";
-
-const colors = {
-  light: ["#2BC9EC", "#C8F5FF", "#FFFFFF"],
-};
-
-const groundColor = ["#CB783B", "#ECBF7D"];
+import Loader from "@/module/splash/components/Loader";
+import { colors, groundColor, groundHeight } from "@/utils/constant";
 
 const ScreenCanva = ({
   children,
   roadX,
+  isLoading,
+  onLoaded,
+  isGameOver,
 }: {
   children?: ReactNode;
-  roadX: SharedValue<number>;
+  roadX?: SharedValue<number>;
+  isLoading?: boolean;
+  onLoaded?: VoidFunction;
+  isGameOver?: boolean;
 }) => {
   const { width, height } = useWindowDimensions();
 
-  const road = useSVG(require("@/assets/images/road.svg"));
-
-  const { top, bottom } = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
 
   const r = width * 0.33;
-  const pageHeight = height - bottom;
 
   return (
     <Canvas style={{ width, height: height }}>
@@ -53,6 +45,7 @@ const ScreenCanva = ({
           end={vec(groundHeight, groundHeight)}
         />
       </Rect>
+      {isLoading && <Loader onLoaded={onLoaded} />}
     </Canvas>
   );
 };

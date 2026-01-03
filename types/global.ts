@@ -2,6 +2,10 @@ import { ReactNode } from "react";
 import { TextStyle, ViewStyle } from "react-native";
 import { ModalProps } from "react-native-modal";
 
+export enum StoreKeys {
+  score = "game-score",
+}
+
 export interface NotificationParams {
   title?: string;
   message: string;

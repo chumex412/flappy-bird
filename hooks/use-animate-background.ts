@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Easing,
   useAnimatedReaction,
   useDerivedValue,
   useSharedValue,
   withRepeat,
-  withSequence,
   withTiming,
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
@@ -22,10 +21,12 @@ import {
 const roadWidth = 708;
 
 export function useAnimateBackgroundContent(width: number, height: number) {
-  const speed = useSharedValue(1);
-  const backgroundX = useSharedValue(0);
-  const poleX = useSharedValue(width - 50);
+  const [score, setScore] = useState(0);
 
+  const backgroundX = useSharedValue(0);
+  const poleX = useSharedValue(width + 100);
+
+  const speed = useSharedValue(1);
   const cameraX = useDerivedValue(() => backgroundX.value * speed.value);
 
   const cityX = useDerivedValue(() => cameraX.value * 0.3);
@@ -40,34 +41,35 @@ export function useAnimateBackgroundContent(width: number, height: number) {
     [bottomPoleHeight, height]
   );
 
-  const handleSpeed = () => {
-    "worklet";
-    return 5000 / speed.value;
-  };
+  const speedControl = Math.round(5000 / speed.value);
 
   const movePole = () => {
     poleX.value = withRepeat(
-      withSequence(
-        withTiming(-width - 100, {
-          duration: handleSpeed(),
-          easing: Easing.linear,
-        }),
-        withTiming(width, { duration: 0 })
-      ),
-      -1
-    );
-  };
-
-  const moveBackground = () => {
-    backgroundX.value = withRepeat(
-      withTiming(-width, { duration: handleSpeed(), easing: Easing.linear }),
+      withTiming(-200, {
+        duration: 3500,
+        easing: Easing.linear,
+      }),
       -1,
       false
     );
   };
 
+  const moveBackground = () => {
+    backgroundX.value = withRepeat(
+      withTiming(-width, {
+        duration: 3500,
+        easing: Easing.linear,
+      }),
+      -1,
+      false
+    );
+  };
+
+  const handleScores = (isGameOn: boolean) => {
+    setScore((previousScore) => (isGameOn ? previousScore + 1 : 0));
+  };
+
   const randomizePipes = () => {
-    console.log("hey");
     const playAreaHeight = height - BASE;
 
     const maxTopPipeHeight = playAreaHeight - PIPE_GAP - MIN_PIPE_HEIGHT;
@@ -91,10 +93,13 @@ export function useAnimateBackgroundContent(width: number, height: number) {
         currentPos <= -pipeWidth && (previousPos ?? 0) > -pipeWidth;
 
       if (hasJustExited) {
+        speed.value = speed.value + 0.4;
         scheduleOnRN(randomizePipes);
       }
     }
   );
+
+  console.log("speed", speed.value, "control", speedControl);
 
   return {
     backgroundX,
@@ -106,7 +111,10 @@ export function useAnimateBackgroundContent(width: number, height: number) {
     topPoleHeight,
     bottomPoleHeight,
     bottomPipeY,
+    speed,
+    score,
     moveBackground,
     movePole,
+    handleScores,
   };
 }

@@ -10,7 +10,7 @@ export interface PipeProps {
 export interface RoadProps {
   width: number;
   height: number;
-  roadX: SharedValue<number>;
+  roadX?: SharedValue<number>;
 }
 
 export interface BirdProps {

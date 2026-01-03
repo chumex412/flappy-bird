@@ -5,5 +5,14 @@ export type BirdMotionHookType = {
   backgroundX: SharedValue<number>;
   topPipeHeight: SharedValue<number>;
   bottomPipeY: SharedValue<number>;
-  callback?: VoidFunction;
+  score: number;
+  scoreHandler: (isGameOn: boolean) => void;
+  stopGame: VoidFunction;
+};
+
+export type CollisionHandlerType = {
+  poleXVal: number;
+  topPoleHeightVal: number;
+  bottomPoleYVal: number;
+  birdBoundsVals: { top: number; bottom: number; right: number; left: number };
 };
